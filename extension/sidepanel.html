@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lani</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img class="mark" src="icons/icon32.png" alt="">
+      <span class="name">Lani</span>
+      <span id="dot" class="dot" title="Checking the model server..."></span>
+    </div>
+    <button id="gear" class="icon-btn" aria-label="Settings" aria-expanded="false">Settings</button>
+  </header>
+
+  <section id="settings" hidden>
+    <h2>Model</h2>
+    <label>API format
+      <select data-key="api">
+        <option value="openai">OpenAI-compatible (llama.cpp, Ollama, vLLM)</option>
+        <option value="anthropic">Anthropic Messages (claude-local router, Claude API)</option>
+      </select>
+    </label>
+    <label>Server URL <input data-key="baseUrl" type="text" spellcheck="false"></label>
+    <label>Model name <input data-key="model" type="text" spellcheck="false"></label>
+    <label>API key (optional) <input data-key="apiKey" type="password" autocomplete="off"></label>
+    <label>Reply style
+      <select data-key="mode">
+        <option value="text">One-line commands (small models)</option>
+        <option value="tools">Tool calling (larger models)</option>
+      </select>
+    </label>
+    <details>
+      <summary>Advanced</summary>
+      <label>Max steps <input data-key="maxSteps" type="number" min="1" max="100"></label>
+      <label>Max reply tokens <input data-key="maxTokens" type="number" min="16" max="4096"></label>
+      <label>Temperature <input data-key="temperature" type="number" min="0" max="2" step="0.1"></label>
+    </details>
+
+    <h2>Safety and data</h2>
+    <label class="check"><input data-key="allowEval" type="checkbox"> Allow JavaScript execution (eval_js)</label>
+    <label class="check"><input data-key="recordTraces" type="checkbox"> Keep a step-by-step trace of each run</label>
+
+    <h2>External agents</h2>
+    <p class="hint">Lets tools such as Claude Code drive Chrome through the local bridge. Token file: <code>~/.config/chrome-tab-bridge/token</code></p>
+    <label class="check"><input data-key="bridgeEnabled" type="checkbox"> Connect to the bridge</label>
+    <label>Bridge URL <input data-key="bridgeUrl" type="text" spellcheck="false"></label>
+    <label>Bridge token <input data-key="bridgeToken" type="password" autocomplete="off"></label>
+  </section>
+
+  <main id="log" aria-live="polite">
+    <p class="empty">Tell Lani what to do in the page you have open.</p>
+  </main>
+
+  <footer>
+    <div id="chip" class="chip" hidden></div>
+    <textarea id="task" rows="2" placeholder="Tell Lani what to do..."></textarea>
+    <div class="actions">
+      <button id="send" class="primary">Send</button>
+      <button id="stop" hidden>Stop</button>
+      <button id="trace" hidden>Download trace</button>
+    </div>
+  </footer>
+
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>

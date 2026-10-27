@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+bridge.log
+.DS_Store
+.traces/
+traces/
+node_modules/

@@ -1,0 +1,136 @@
+[
+  {"type": "function", "function": {
+    "name": "tabs_list",
+    "description": "List all open Chrome tabs with their tab_id, title, url and whether each is active. Call this first to see what is open.",
+    "parameters": {"type": "object", "properties": {}}
+  }},
+  {"type": "function", "function": {
+    "name": "tab_open",
+    "description": "Open a new tab at a URL and make it the current tab. Returns once the page has loaded.",
+    "parameters": {"type": "object", "properties": {
+      "url": {"type": "string", "description": "Full URL including https://"}
+    }, "required": ["url"]}
+  }},
+  {"type": "function", "function": {
+    "name": "tab_focus",
+    "description": "Bring a tab to the front and make it the current tab.",
+    "parameters": {"type": "object", "properties": {
+      "tab_id": {"type": "integer"}
+    }, "required": ["tab_id"]}
+  }},
+  {"type": "function", "function": {
+    "name": "tab_close",
+    "description": "Close a tab.",
+    "parameters": {"type": "object", "properties": {
+      "tab_id": {"type": "integer", "description": "Defaults to the current tab"}
+    }}
+  }},
+  {"type": "function", "function": {
+    "name": "navigate",
+    "description": "Load a URL in the current tab (or tab_id) and wait for it to load. Take a snapshot afterwards before clicking anything.",
+    "parameters": {"type": "object", "properties": {
+      "url": {"type": "string"},
+      "tab_id": {"type": "integer"}
+    }, "required": ["url"]}
+  }},
+  {"type": "function", "function": {
+    "name": "back",
+    "description": "Go back one page in history.",
+    "parameters": {"type": "object", "properties": {"tab_id": {"type": "integer"}}}
+  }},
+  {"type": "function", "function": {
+    "name": "forward",
+    "description": "Go forward one page in history.",
+    "parameters": {"type": "object", "properties": {"tab_id": {"type": "integer"}}}
+  }},
+  {"type": "function", "function": {
+    "name": "reload",
+    "description": "Reload the page.",
+    "parameters": {"type": "object", "properties": {"tab_id": {"type": "integer"}}}
+  }},
+  {"type": "function", "function": {
+    "name": "snapshot",
+    "description": "Read the page: its url, title, visible text, and a numbered list of visible interactive elements (links, buttons, inputs, selects). Use the numbers as ref in click, type, select, get_text. Refs are only valid until the page changes, so snapshot again after navigating or clicking.",
+    "parameters": {"type": "object", "properties": {
+      "tab_id": {"type": "integer"},
+      "max_text_chars": {"type": "integer", "description": "Cap on visible text returned (default 6000)"}
+    }}
+  }},
+  {"type": "function", "function": {
+    "name": "click",
+    "description": "Click an element by its ref from the latest snapshot.",
+    "parameters": {"type": "object", "properties": {
+      "ref": {"type": "integer"},
+      "tab_id": {"type": "integer"}
+    }, "required": ["ref"]}
+  }},
+  {"type": "function", "function": {
+    "name": "type",
+    "description": "Type text into an input, textarea or contenteditable element by ref. Clears existing text unless clear is false. Set submit to true to submit the surrounding form.",
+    "parameters": {"type": "object", "properties": {
+      "ref": {"type": "integer"},
+      "text": {"type": "string"},
+      "clear": {"type": "boolean", "description": "Replace existing text (default true)"},
+      "submit": {"type": "boolean", "description": "Submit the form after typing (default false)"},
+      "tab_id": {"type": "integer"}
+    }, "required": ["ref", "text"]}
+  }},
+  {"type": "function", "function": {
+    "name": "select",
+    "description": "Choose an option in a <select> by ref. value may be the option's value or its visible text.",
+    "parameters": {"type": "object", "properties": {
+      "ref": {"type": "integer"},
+      "value": {"type": "string"},
+      "tab_id": {"type": "integer"}
+    }, "required": ["ref", "value"]}
+  }},
+  {"type": "function", "function": {
+    "name": "press_key",
+    "description": "Send a keyboard key (for example Enter, Escape, ArrowDown, Tab) to an element by ref, or to the focused element if no ref is given. Events are synthetic, so some sites ignore them.",
+    "parameters": {"type": "object", "properties": {
+      "key": {"type": "string"},
+      "ref": {"type": "integer"},
+      "tab_id": {"type": "integer"}
+    }, "required": ["key"]}
+  }},
+  {"type": "function", "function": {
+    "name": "scroll",
+    "description": "Scroll the page window up, down, or to the top or bottom.",
+    "parameters": {"type": "object", "properties": {
+      "direction": {"type": "string", "enum": ["up", "down", "top", "bottom"]},
+      "amount": {"type": "integer", "description": "Pixels for up/down (default 600)"},
+      "tab_id": {"type": "integer"}
+    }, "required": ["direction"]}
+  }},
+  {"type": "function", "function": {
+    "name": "get_text",
+    "description": "Get the text of one element by ref (for example to read a price or a result that is cut off in the snapshot).",
+    "parameters": {"type": "object", "properties": {
+      "ref": {"type": "integer"},
+      "tab_id": {"type": "integer"}
+    }, "required": ["ref"]}
+  }},
+  {"type": "function", "function": {
+    "name": "wait_for",
+    "description": "Wait until some text appears on the page or a CSS selector matches. Use after actions that load content asynchronously.",
+    "parameters": {"type": "object", "properties": {
+      "text": {"type": "string"},
+      "selector": {"type": "string"},
+      "timeout_ms": {"type": "integer", "description": "Default 10000"},
+      "tab_id": {"type": "integer"}
+    }}
+  }},
+  {"type": "function", "function": {
+    "name": "screenshot",
+    "description": "Capture the visible part of a tab as a base64 PNG. Use when the text snapshot is not enough, such as for layout or images.",
+    "parameters": {"type": "object", "properties": {"tab_id": {"type": "integer"}}}
+  }},
+  {"type": "function", "function": {
+    "name": "eval_js",
+    "description": "Run a JavaScript expression in the page and return its JSON-serializable value. Powerful: use it only when the other tools cannot do the job.",
+    "parameters": {"type": "object", "properties": {
+      "code": {"type": "string", "description": "A JavaScript expression or statements; a returned value is sent back"},
+      "tab_id": {"type": "integer"}
+    }, "required": ["code"]}
+  }}
+]
