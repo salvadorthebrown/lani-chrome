@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generates Lani icon candidates with Flux schnell through the local ComfyUI API (runs on the Mule)."""
+"""Generates Lani icon candidates with Flux schnell through a local ComfyUI server (default http://127.0.0.1:8286)."""
 import json, pathlib, sys, time, urllib.request, urllib.parse
 
 API = "http://127.0.0.1:8286"
